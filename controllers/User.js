@@ -69,9 +69,29 @@ export const login = async (req, res) => {
     // Check if the provided password matches the stored password
     
     if (user.pin === pin) {
-      // Password is valid, user is authenticated
-      return res.status(200).json({ message: 'Login successful' });
-    } else {
+        // Password is valid, user is authenticated
+        const token = jwt.sign({
+        id: user._id,
+        },
+        process.env.JWT,
+        );
+        res.cookie("access_token", token, {
+        secure: true,
+        httpOnly:true,
+        },
+        { expiresIn: '1h' }
+        )
+        .json({
+      _id: user._id,
+      fullname: user.fullname,
+      email: user.email,
+      phonenumber: user.phonenumber,
+      token,
+      });
+
+return res.status(200).json({ message: 'Login successful' });
+    }
+    else {
       // Invalid password
       return res.status(401).json({ message: 'Invalid pin' });
     }
