@@ -1,23 +1,11 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
 const lenderSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
-  },
-  fullName: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
+    ref: "User",
   },
   address: {
     type: String,
@@ -25,10 +13,6 @@ const lenderSchema = new Schema({
   },
   dateOfBirth: {
     type: Date,
-    required: true,
-  },
-  ssnOrTaxID: {
-    type: String,
     required: true,
   },
   investmentPreferences: {
@@ -61,19 +45,11 @@ const lenderSchema = new Schema({
     type: Boolean,
     required: true,
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  securityPin: {
-    type: String,
-    required: true,
-  },
   agreementsAccepted: {
     investorAgreement: Boolean,
   },
 });
 
-const Lender = mongoose.model('Lender', lenderSchema);
+const Lender = mongoose.model("Lender", lenderSchema);
 
 export default Lender;
