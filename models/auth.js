@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import validate from "validator";
+import validator from "validator";
 
 const { Schema } = mongoose;
 
@@ -28,7 +28,10 @@ const userSchema = new Schema(
       index: true,
       sparse: true,
       required: true,
-      validate: [validator.isMobilePhone('"en-NG')],
+      validate: {
+        validator: () => validator.isMobilePhone('"en-NG'),
+        message: "please provide a valid phone number",
+      },
     },
     isVerified: {
       type: Boolean,
@@ -64,6 +67,17 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  return resetToken;
+};
 
 const User = mongoose.model("User", userSchema);
 
