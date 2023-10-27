@@ -39,8 +39,9 @@ export const register = async (req, res) => {
     //   }
     //   );
       // Create a new user document in the database
-    const newUser = new User({ email, phonenumber, Pin, verificationCode });
+    const newUser = new User({ email, phonenumber, pin, verificationCode });
     await newUser.save();
+    console.log(newUser)
 
   } catch (error) {
     console.error(error);

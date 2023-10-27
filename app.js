@@ -26,8 +26,7 @@ app.use(bodyParser.json());
 //     ],
 // })));
 app.use(cors());
-app.use('/api/', userRoutes);
-app.use('/api/loans', loanRoutes);
+app.use('/api/', userRoutes, loanRoutes);
 
 // i don't know why i did this oo mannns
 mongoose.connect(process.env.MONGO_URI)

@@ -24,15 +24,19 @@ const loanSchema = new Schema({
     type: Number,
     required: true,
   },
-  // Date when the loan was created
+  purpose: {
+    type: String,
+    required:true
+  },
+
   createdDate: {
     type: Date,
     default: Date.now,
   },
   // Status of the loan (e.g., 'pending', 'approved', 'repaid')
-  status: {
+   status: {
     type: String,
-    enum: ['pending', 'approved', 'repaid'],
+    enum: ['pending', 'funded', 'repaid', 'defaulted'],
     default: 'pending',
   },
   // Lender (reference to the lender user)

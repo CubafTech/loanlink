@@ -19,6 +19,13 @@ const userSchema = new Schema({
       message: 'Phone number must be a 10-digit number with optional dashes or spaces.',
     },
   },
+  tier: {
+    type: String,
+    enum: [
+      "1", "2", "3"
+    ],
+    default:"1"
+  },
   email: {
     type: String,
     required: true,
@@ -48,8 +55,17 @@ const userSchema = new Schema({
   },
   verificationCode: {
     type: Number,
-    
+
+  },
+  isAdmin: {
+    type: Boolean,
+    default:false,
+  },
+  isSuperAdmin: {
+    type: Boolean,
+    default:false,
   }
+  
 });
 
 const User = mongoose.model('User', userSchema);
