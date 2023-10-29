@@ -7,9 +7,21 @@ const borrowerSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  dateOfBirth: {
-    type: Date,
-    required: [true, "Your birth date is required"],
+  firstName: {
+    required: [true, "The first name is required"],
+    type: String,
+  },
+  lastName: {
+    type: String,
+    required: [true, "The Last name is required"],
+  },
+  gender: {
+    type: String,
+    enum: {
+      values: ["male", "female"],
+      message: "{{VALUE}} is not a valid gender",
+    },
+    required: true,
   },
   address: {
     type: String,
@@ -31,14 +43,33 @@ const borrowerSchema = new Schema({
     type: String,
     required: [true, "Local Government Area is required"],
   },
+  income: {
+    type: Number,
+    required: [true, "Your income is required"],
+  },
+  businessName: {
+    type: String,
+    required: [true, "Your business name is required"],
+  },
   businessType: {
     type: String,
+    required: [true, "Your business type is required"],
+  },
+  businessSector: {
+    type: String,
+    required: [true, "Your business sector is required"],
   },
   businessDescription: {
     type: String,
+    required: [true, "Your business description is required"],
+  },
+  cacNumber: {
+    type: Number,
+    required: [true, "Your CAC file is required"],
   },
   role: {
     type: String,
+    required: [true, "Your role in the company is required"],
   },
   bvn: {
     type: Number,
@@ -47,6 +78,7 @@ const borrowerSchema = new Schema({
   },
   approveConsent: {
     type: Boolean,
+    required: [true, "You must agree to our terms and conditions"],
   },
   status: {
     type: String,

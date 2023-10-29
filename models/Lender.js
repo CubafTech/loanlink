@@ -7,6 +7,7 @@ const lenderSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+
   address: {
     type: String,
     required: true,
