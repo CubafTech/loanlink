@@ -7,14 +7,6 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
-    firstName: {
-      required: [true, "The first name is required"],
-      type: String,
-    },
-    lastName: {
-      type: String,
-      required: [true, "The Last name is required"],
-    },
     email: {
       unique: true,
       index: true,

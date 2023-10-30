@@ -2,6 +2,7 @@ import { promisify } from "util";
 import AppError from "../utils/appError.js";
 import jwt from "jsonwebtoken";
 import catchAsync from "../utils/catchAsync.js";
+import User from "../models/auth.js";
 
 export const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -58,11 +59,11 @@ export const protect = catchAsync(async (req, res, next) => {
   }
 
   //   Check if the password was changed
-  if (user.changePasswordAt(decoded.iat)) {
-    return next(
-      new AppError("The password is recently changed please log in again", 401)
-    );
-  }
+  // if (user.changePasswordAt(decoded.iat)) {
+  //   return next(
+  //     new AppError("The password is recently changed please log in again", 401)
+  //   );
+  // }
   req.user = user;
   next();
 });

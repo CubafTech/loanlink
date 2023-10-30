@@ -1,8 +1,24 @@
-import Borrower from "../models/Borrower";
-import catchAsync from "../utils/catchAsync";
+import Borrower from "../models/Borrower.js";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
+import { validateRequestWithSchema } from "../utils/validate.js";
 
-const createAccount = catchAsync(async (req, res) => {
-  const data = await Borrower.create({ createdBy: req.user._id });
+export const createAccount = catchAsync(async (req, res, next) => {
+  validateRequestWithSchema(req, Borrower.schema, next);
+  const borrower = await Borrower.findOne({ createdBy: req.user._id });
+
+  let data;
+  if (borrower) {
+    data = await Borrower.findByIdAndUpdate(borrower._id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+  } else {
+    data = await Borrower.create({
+      createdBy: req.user._id,
+      ...req.body,
+    });
+  }
 
   return res.status(201).json({
     status: "success",
