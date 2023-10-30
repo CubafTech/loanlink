@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import validator from "validator";
+import { validateNigeriaPhoneNumber } from "../utils/validate.js";
 
 const { Schema } = mongoose;
 
@@ -23,13 +24,12 @@ const userSchema = new Schema(
       validate: [validator.isEmail, "Please provide a valid email"],
     },
     phone: {
-      type: Number,
+      type: String,
       unique: true,
       index: true,
-      sparse: true,
       required: true,
       validate: {
-        validator: () => validator.isMobilePhone('"en-NG'),
+        validator: validateNigeriaPhoneNumber,
         message: "please provide a valid phone number",
       },
     },
@@ -77,6 +77,13 @@ userSchema.methods.createPasswordResetToken = function () {
     .digest("hex");
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
+};
+
+userSchema.methods.comparePassword = async function (
+  providedPassword,
+  dbPassword
+) {
+  return await bcrypt.compare(providedPassword, dbPassword);
 };
 
 const User = mongoose.model("User", userSchema);
