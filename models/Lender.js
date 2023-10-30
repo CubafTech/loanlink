@@ -3,50 +3,57 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const lenderSchema = new Schema({
-  user: {
+  createdBy: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  firstName: {
+    required: [true, "The first name is required"],
+    type: String,
+  },
+  lastName: {
+    type: String,
+    required: [true, "The Last name is required"],
+  },
+  gender: {
+    type: String,
+    enum: {
+      values: ["male", "female"],
+      message: "{{VALUE}} is not a valid gender",
+    },
+    required: true,
+  },
   address: {
     type: String,
-    required: true,
+    required: [true, "Your home address is required"],
   },
-  dateOfBirth: {
-    type: Date,
-    required: true,
+  state: {
+    type: String,
+    required: [true, "Your state of resident is required"],
   },
-  investmentPreferences: {
-    // Customize this field based on your platform's preferences
-    type: [String],
-    required: true,
+  country: {
+    type: String,
+    default: "Nigeria",
+    enum: {
+      value: "Nigeria",
+      message: "The only supported country is Nigeria",
+    },
   },
-  preferredPaymentMethods: {
-    // Customize this field based on available options (e.g., array of strings)
-    type: [String],
-    required: true,
+  lga: {
+    type: String,
+    required: [true, "Local Government Area is required"],
   },
-  bankAccount: {
-    // Customize this field based on your platform's requirements
-    bankName: String,
-    accountNumber: String,
-    routingNumber: String,
+  income: {
+    type: Number,
+    required: [true, "Your income is required"],
   },
-  identityVerification: {
-    // Customize this field to store verification documents
-    driverLicense: String,
-    passport: String,
-  },
-  incomeAndFinancialInfo: {
-    // Customize this field based on what you collect
-    annualIncome: Number,
-    totalAssets: Number,
-  },
-  riskDisclosureAcknowledged: {
+  approveConsent: {
     type: Boolean,
-    required: true,
+    required: [true, "You must agree to our terms and conditions"],
   },
-  agreementsAccepted: {
-    investorAgreement: Boolean,
+  status: {
+    type: String,
+    default: "inactive",
   },
 });
 
