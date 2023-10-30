@@ -38,7 +38,7 @@ const loanSchema = new Schema({
   // Lender (reference to the lender user)
   lender: {
     type: Schema.Types.ObjectId,
-    ref: "Borrower",
+    ref: "Lender",
   },
 });
 

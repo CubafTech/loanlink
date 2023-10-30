@@ -3,6 +3,8 @@ import Loan from "../models/Loan.js";
 import catchAsync from "../utils/catchAsync.js";
 import { validateRequestWithSchema } from "../utils/validate.js";
 import AppError from "../utils/appError.js";
+import Lender from "../models/Lender.js";
+import Wallet from "../models/wallet.js";
 
 export const createLoan = catchAsync(async (req, res, next) => {
   validateRequestWithSchema(req, Loan.schema, next);
@@ -92,4 +94,28 @@ export const getLoans = catchAsync(async (req, res) => {
   });
 });
 
-export const FundLoan = catchAsync(async (req, res, next) => {});
+export const FundLoan = catchAsync(async (req, res, next) => {
+  const wallet = await Wallet.findOne({ createdBy: req.user._id });
+  const loan = await Loan.findById(req.params._id);
+  if (!loan) return next(new AppError("This loan does not exist", 404));
+  if (loan.amount > wallet.amount)
+    return next(
+      new AppError(
+        "You don't havee enough fund to fund this loan, please fund your wallet",
+        401
+      )
+    );
+  const borrower = await Wallet.findOne({ createdBy: loan.createdBy });
+  const response = await Wallet.findByIdAndUpdate(borrower._id, {
+    amount: borrower.amount + loan.amount,
+  });
+  loan.lender = req.user._id;
+  laon.save({ validateBeforeSave: false });
+
+  return res.status(200).json({
+    status: "success",
+    message: "You have successfully funded this loan",
+  });
+});
+
+export const RefundLoan = () => {};

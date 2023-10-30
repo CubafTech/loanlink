@@ -89,9 +89,9 @@ const borrowerSchema = new Schema({
     type: String,
     default: "inactive",
   },
-  balance: {
-    type: Number,
-    default: 0,
+  wallet: {
+    type: mongoose.Types.ObjectId,
+    ref: "Wallet",
   },
 });
 
