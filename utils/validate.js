@@ -1,4 +1,5 @@
 import validator from "validator";
+import AppError from "./appError.js";
 
 export const validateNigeriaPhoneNumber = (phoneNumber) => {
   return validator.isMobilePhone(phoneNumber, "en-NG");
