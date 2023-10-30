@@ -1,4 +1,4 @@
-import Lender from "../models/lender.js";
+import Lender from "../models/Lender.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 import { validateRequestWithSchema } from "../utils/validate.js";
