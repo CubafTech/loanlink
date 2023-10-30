@@ -5,12 +5,18 @@ import { validateRequestWithSchema } from "../utils/validate.js";
 
 export const fundWallet = catchAsync(async (req, res, next) => {
   validateRequestWithSchema(req, Wallet.schema, next);
-  const data = await Wallet.create({
-    createdBy: req.user._id,
-    owner: req.user._id,
-    amount: req.body.amount,
-    message: "Wallet Funding",
-  });
+  const wallet = await Wallet.findOne({ createdBy: req.user._id });
+  let data;
+  if (wallet) {
+    data = await Wallet.findByIdAndUpdate(wallet._id, {
+      amount: wallet.amount + req.body.amount,
+    });
+  } else {
+    data = await Wallet.create({
+      createdBy: req.user._id,
+      amount: req.body.amount,
+    });
+  }
   return res.status(201).json({
     status: "success",
     message: "wallet funding successful",
@@ -20,12 +26,24 @@ export const fundWallet = catchAsync(async (req, res, next) => {
 
 export const withdrawFund = catchAsync(async (req, res, next) => {
   validateRequestWithSchema(req, Wallet.schema, next);
-  const data = await Wallet.create({
-    createdBy: req.user._id,
-    owner: req.user._id,
-    amount: -req.body.amount,
-    message: "Fund withdraw",
-  });
+  const wallet = await Wallet.findOne({ createdBy: req.user._id });
+  let data;
+  if (wallet) {
+    if (wallet.amount < req.body.amount) {
+      return next(
+        new AppError("withrawal denied, due to lack of insufficent fund", 401)
+      );
+    }
+
+    data = await Wallet.findByIdAndUpdate(wallet._id, {
+      amount: wallet.amount - req.body.amount,
+    });
+  } else {
+    data = await Wallet.create({
+      createdBy: req.user._id,
+      amount: req.body.amount,
+    });
+  }
 
   return res.status(201).json({
     status: "success",

@@ -6,6 +6,7 @@ import {
   getLoans,
   deleteLoan,
   getAllLoans,
+  FundLoan,
 } from "../controllers/loan.js";
 import { protect } from "../middleware/auth.js";
 import { ableToRequestLoan } from "../middleware/loan.js";
@@ -20,6 +21,7 @@ router.get("/", getLoans);
 // Create a new loan
 
 router.post("/", ableToRequestLoan, createLoan);
+router.get("/fund/:_id", FundLoan);
 
 // Retrieve a loan by ID
 router.get("/:_id", getLoanById);

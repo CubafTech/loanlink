@@ -27,3 +27,12 @@ export const createAccount = catchAsync(async (req, res, next) => {
     data,
   });
 });
+
+export const fetchProfile = catchAsync(async (req, res, next) => {
+  const user = await Borrower.findById(req.user._id);
+  if (!user) return next(new AppError("user profile do not exist", 404));
+  return res.status(200).json({
+    status: "sucess",
+    message: "Profile fetched successfully",
+  });
+});

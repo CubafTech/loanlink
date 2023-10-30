@@ -3,6 +3,7 @@ import catchAsync from "../utils/catchAsync.js";
 import Email from "../utils/email.js";
 import { createToken, createSendToken } from "../middleware/auth.js";
 import AppError from "../utils/appError.js";
+import { GenerateRandom } from "../utils/random.js";
 
 export const register = catchAsync(async (req, res, next) => {
   const { password, email, phone } = req.body;
@@ -112,4 +113,46 @@ export const updatePassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: true });
 
   createSendToken(200, user, "password change succesfully", res);
+});
+
+export const requestEmailVerification = catchAsync(async (req, res, next) => {
+  console.log(req.query);
+  if (!req.query.email)
+    return next(new AppError("please provide an email", 401));
+
+  const random = GenerateRandom();
+  const email = new Email(req.query, "email verification");
+  await email.sendEmailToken(`Your verification code is ${random}`);
+
+  await User.findOneAndUpdate(
+    { email: req.query.email },
+    { verificationCode: random }
+  );
+
+  return res.status(200).json({
+    status: "success",
+    message:
+      "if an account is found with this email, a verification code will be sent to the email address",
+  });
+});
+
+export const EmailVerification = catchAsync(async (req, res, next) => {
+  const { email, token } = req.body;
+  if (!email || !token)
+    return next(new AppError("please provide an email and token", 401));
+
+  const user = await User.findOne({ email, verificationCode: token });
+  console.log(user);
+  if (!user) return next(new AppError("invalid token or email", 401));
+
+  const data = await User.findByIdAndUpdate(
+    user._id,
+    {
+      isVerified: true,
+      verificationCode: null,
+    },
+    { new: true }
+  );
+
+  createSendToken(200, data, "User email successfully verified", res);
 });
