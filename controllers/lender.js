@@ -1,12 +1,11 @@
-import Borrower from "../models/borrower.js";
+import Lender from "../models/lender.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 import { validateRequestWithSchema } from "../utils/validate.js";
-import { response } from "express";
 
 export const createAccount = catchAsync(async (req, res, next) => {
-  validateRequestWithSchema(req, Borrower.schema, next);
-  const response = await Borrower.findOne({ createdBy: req.user._id });
+  validateRequestWithSchema(req, Lender.schema, next);
+  const response = await Lender.findOne({ createdBy: req.user._id });
 
   let data;
   if (response) {
@@ -15,7 +14,7 @@ export const createAccount = catchAsync(async (req, res, next) => {
       runValidators: true,
     });
   } else {
-    data = await Borrower.create({
+    data = await Lender.create({
       createdBy: req.user._id,
       ...req.body,
     });

@@ -5,7 +5,7 @@ import { createToken, createSendToken } from "../middleware/auth.js";
 import AppError from "../utils/appError.js";
 
 export const register = catchAsync(async (req, res, next) => {
-  const { firstName, lastName, password, email, phone } = req.body;
+  const { password, email, phone } = req.body;
   const user = await User.create({
     password,
     email,
