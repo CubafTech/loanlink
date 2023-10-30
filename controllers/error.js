@@ -1,9 +1,10 @@
 import AppError from "../utils/appError.js";
 
 const productionError = (err, res) => {
+  console.log(err);
   if (!err.isOperational) {
     return res.status(500).json({
-      message: "something realy went wrong",
+      message: "something  went wrong",
     });
   }
   res.status(err.statusCode).json({
@@ -81,6 +82,30 @@ export const globalError = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === "production") {
     let error = { ...err };
     if (err.name === "CastError") error = handleCastError(error);
-    productionError(error, res);
+    if (err.name === "CastError") {
+      let error = { ...err };
+      error = handleCastError(error);
+      return productionError(error, res);
+    }
+    if (err.name === "ValidationError") {
+      let error = { ...err };
+      error = handleValiationError(error);
+      return productionError(error, res);
+    }
+    if (err.code === 11000) {
+      let error = { ...err };
+      error = handleDuplicateError(error);
+      return productionError(error, res);
+    }
+    if (err.name === "JsonWebTokenError") {
+      let error = { ...err };
+      error = handleJsonWebTokenError(error);
+      return productionError(error, res);
+    }
+    if (err.name === "TokenExpiredError") {
+      let error = { ...err };
+      error = handleTokenExpiredError(error);
+      return productionError(error, res);
+    }
   }
 };

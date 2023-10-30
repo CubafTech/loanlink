@@ -27,6 +27,11 @@ const borrowerSchema = new Schema({
     type: String,
     required: [true, "Your home address is required"],
   },
+  type: {
+    type: String,
+    default: "borrower",
+    emum: ["borrower"],
+  },
   state: {
     type: String,
     required: [true, "Your state of resident is required"],
@@ -83,6 +88,10 @@ const borrowerSchema = new Schema({
   status: {
     type: String,
     default: "inactive",
+  },
+  balance: {
+    type: Number,
+    default: 0,
   },
 });
 

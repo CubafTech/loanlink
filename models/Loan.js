@@ -4,7 +4,6 @@ const { Schema } = mongoose;
 
 const loanSchema = new Schema({
   // Reference to the borrower user
-
   createdBy: {
     type: Schema.Types.ObjectId,
     ref: "Borrower",

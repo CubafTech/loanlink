@@ -43,6 +43,11 @@ const lenderSchema = new Schema({
     type: String,
     required: [true, "Local Government Area is required"],
   },
+  type: {
+    type: String,
+    default: "lender",
+    emum: ["lender"],
+  },
   income: {
     type: Number,
     required: [true, "Your income is required"],
@@ -54,6 +59,10 @@ const lenderSchema = new Schema({
   status: {
     type: String,
     default: "inactive",
+  },
+  balance: {
+    type: Number,
+    default: 0,
   },
 });
 
