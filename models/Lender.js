@@ -55,6 +55,10 @@ const lenderSchema = new Schema({
     type: String,
     default: "inactive",
   },
+  balance: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Lender = mongoose.model("Lender", lenderSchema);
