@@ -1,3 +1,4 @@
+import Loan from "../models/Loan.js";
 import catchAsync from "../utils/catchAsync.js";
 import { validateRequestWithSchema } from "../utils/validate.js";
 
