@@ -5,23 +5,25 @@ import {
   updateLoan,
   getLoans,
   deleteLoan,
-} from "../controllers/loanController.js";
+} from "../controllers/loan.js";
+import { protect } from "../middleware/auth.js";
+import { ableToRequestLoan } from "../middleware/loan.js";
 // import { verifyAdmin, verifyUser } from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
 // get all loans, basically for loan counts only admins can do this
-router.get("/loans", getLoans);
+router.get("/", getLoans);
 // Create a new loan
-router.post("/loans/create", createLoan);
+router.post("/", protect, ableToRequestLoan, createLoan);
 
 // Retrieve a loan by ID
-router.get("/loans/:id", getLoanById);
+router.get("/:id", getLoanById);
 
 // Update a loan by ID (Protected route: only authorized users can update loans)
-router.put("/loans/:id", updateLoan);
+router.put("/:id", updateLoan);
 
 // Update a loan by ID (Protected route: only authorized users can update loans)
-router.delete("/loans/:id", deleteLoan);
+router.delete("/:id", deleteLoan);
 
 export default router;

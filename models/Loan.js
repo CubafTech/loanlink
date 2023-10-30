@@ -1,69 +1,48 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
 const loanSchema = new Schema({
   // Reference to the borrower user
-  borrower: {
+
+  createdBy: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
+    ref: "Borrower",
   },
   // Loan amount
   amount: {
     type: Number,
     required: true,
+    min: [20000, "The minimum borrowable amount is 20000"],
+    max: [500000, "The maximum borrowable amount is 500000"],
   },
-  // Interest rate (e.g., 5% for 5%)
-  interestRate: {
-    type: Number,
-    required: true,
-  },
+
   // Loan term in months
   term: {
     type: Number,
     required: true,
+    min: [1, "The minimum loan term is 1 month"],
+    max: [12, "The maximum loan term is 12 months"],
   },
   purpose: {
     type: String,
-    required:true
+    required: true,
+    minlength: [30, "The purpose of the loan must be at least 30 characters"],
   },
 
-  createdDate: {
-    type: Date,
-    default: Date.now,
-  },
   // Status of the loan (e.g., 'pending', 'approved', 'repaid')
-   status: {
+  status: {
     type: String,
-    enum: ['pending', 'funded', 'repaid', 'defaulted'],
-    default: 'pending',
+    enum: ["pending", "funded", "repaid", "defaulted"],
+    default: "pending",
   },
   // Lender (reference to the lender user)
   lender: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "Borrower",
   },
-  // Repayment schedule (e.g., array of due dates and amounts)
-  repaymentSchedule: [
-    {
-      dueDate: {
-        type: Date,
-        required: true,
-      },
-      amount: {
-        type: Number,
-        required: true,
-      },
-      paid: {
-        type: Boolean,
-        default: false,
-      },
-    },
-  ],
-  // Add any other fields specific to your loan requirements
 });
 
-const Loan = mongoose.model('Loan', loanSchema);
+const Loan = mongoose.model("Loan", loanSchema);
 
 export default Loan;
