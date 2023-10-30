@@ -1,4 +1,4 @@
-import Borrower from "../models/Borrower.js";
+import Borrower from "../models/borrower.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 

@@ -1,10 +1,10 @@
-import Loan from "../models/Loan.js";
+import Loan from "../models/loan.js";
 import catchAsync from "../utils/catchAsync.js";
 import { validateRequestWithSchema } from "../utils/validate.js";
 
 export const createLoan = catchAsync(async (req, res, next) => {
   validateRequestWithSchema(req, Loan.schema, next);
-  // const loan = await Loan.create(req.body);
+  const loan = await Loan.create(req.body);
   return res.status(201).json({
     status: "success",
     message: "You have successfully created a loan request",
